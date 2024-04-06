@@ -1,0 +1,28 @@
+
+profiles {
+    standard {
+	executor.queueSize = QSIZE
+	process.maxForks = MFORKS
+        process.executor = 'local'
+        docker.enabled = false
+    }
+
+    cluster {
+        executor.queueSize = QSIZE
+	process.maxForks = MFORKS
+	process.executor = 'slurm'
+        process.queue = 'normal_prio' // 'normal' (original) 'compute' on pcluster, 'normal' on biocluster
+    	docker.enabled = false
+    	process.cpus = 1 // maps to the `-c,--cpus-per-task` slurm option.
+    	//process.clusterOptions = '-n 8' // the `--ntasks` determines number of tasks allocated
+    }
+
+    cloud {
+        executor.queueSize = QSIZE
+	process.maxForks = MFORKS
+	process.executor = 'aws'
+        process.container = 'azza'
+        docker.enabled = true
+    }
+
+}
