@@ -13,7 +13,7 @@ def load_data(filename):
                 n = fields[3]
                 time = fields[4]
                 if n in data_points:
-                    data_point[n][tool] = time
+                    data_points[n][tool] = time
                 else:
                     data_points[n]={tool:time}
             return tools, data_points
@@ -26,20 +26,16 @@ def print_data(tools, data_points):
     tool_list = list(tools)
 
     # Print header row
-    header = "x,"
+    header = "x"
     for i in range(len(tool_list)):
-        if i < len(tool_list)-1:
-            header += ","
-        header += tool_list[i]
+        header += "," + tool_list[i]
     print(header)
 
     # Print rest of rows
     for n in data_points:
-        row = str(n) + ","
+        row = str(n)
         for i in range(len(tool_list)):
-            if i < len(tool_list)-1:
-                header += ","
-            row += data_points[n][tool_list[i]]
+            row += "," + data_points[n][tool_list[i]]
         print(row)
 
 def main():
