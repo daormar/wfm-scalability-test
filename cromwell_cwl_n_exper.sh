@@ -4,8 +4,7 @@ get_n_values()
 
     case ${expertype} in
         "host_process")
-#            echo "1 10 100"
-            echo "10"
+            echo "1 10 100"
             ;;
         "host_workflow")
             echo "1 10 100"
@@ -46,8 +45,8 @@ pushd "${pkgdir}"
 mkdir -p "${baseresultsdir}"
 
 # Iterate over different values of n
-#for expertype in "host_process" "host_workflow"; do
-for expertype in "host_process"; do
+for expertype in "host_process" "host_workflow"; do
+#for expertype in "host_process"; do
     echo "Experiment type: $expertype" >&2
     pfile="/home/dortiz/bio/software/debasher/examples/programs/debasher_${expertype}_expl_deps.sh"
     n_values=$(get_n_values "$expertype")
