@@ -23,7 +23,7 @@ echo "" >&2
 
 ## Installing cromwell
 echo "Installing Cromwell..." >&2
-wget https://github.com/broadinstitute/cromwell/releases/download/86/cromwell-86.jar > cromwell_86.log 2>&1
+wget https://github.com/broadinstitute/cromwell/releases/download/87/cromwell-87.jar > cromwell_87.log 2>&1
 wget https://github.com/broadinstitute/cromwell/releases/download/79/cromwell-79.jar > cromwell_79.log 2>&1
 echo "" >&2
 
