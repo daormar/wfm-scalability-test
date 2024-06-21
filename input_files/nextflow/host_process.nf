@@ -1,6 +1,7 @@
 params.ntasks = 1   // Default value
 
 process host1 {
+    ARRAY
     memory '0.5 GB'
     input:
         val n
