@@ -1,5 +1,5 @@
-if [ $# -ne 4 ]; then
-    echo "Usage: nextflow_record <qsize> <mforks> <expertype> <n>"
+if [ $# -ne 5 ]; then
+    echo "Usage: nextflow_record <qsize> <mforks> <expertype> <n> <array_size>"
     exit 0
 fi
 
@@ -8,6 +8,7 @@ qsize=$1
 mforks=$2
 expertype=$3
 n=$4
+array_size=$5
 
 # Set toolname variable
 toolname="nextflow"
@@ -16,7 +17,7 @@ toolname="nextflow"
 pkgdir="$(cd "$(dirname "$0")" && pwd)"
 nextflowdir="${pkgdir}/software"
 infdir="${pkgdir}/input_files/${toolname}"
-resultsdir="${pkgdir}/results/${toolname}_record"
+resultsdir="${pkgdir}/results/${toolname}_${array_size}_record"
 
 # Create results directory
 if [ -d "${resultsdir}" ]; then
@@ -25,15 +26,24 @@ fi
 mkdir -p "${resultsdir}"
 
 # Generate yml file
-sed "s/QSIZE/${qsize}/" "${infdir}/nf_cfg_template" > "${resultsdir}/cfg"
-sed -i "s/MFORKS/${mforks}/" "${resultsdir}/cfg"
+tmpfile=`mktemp`
+sed "s/QSIZE/${qsize}/" "${infdir}/nf_cfg_template" > "${tmpfile}"
+sed "s/MFORKS/${mforks}/" "${tmpfile}" > "${resultsdir}/cfg"
+rm "${tmpfile}"
+
+# Generate nf file
+if [ "${array_size}" -eq 0 ]; then
+    sed "s/ARRAY//" "${infdir}/${expertype}.nf" > "${resultsdir}/workflow.nf"
+else
+    sed "s/ARRAY/array ${array_size}/" "${infdir}/${expertype}.nf" > "${resultsdir}/workflow.nf"
+fi
 
 # Change directory
 pushd "${pkgdir}"
 
 # Execute experiment
 pushd "${resultsdir}"
-"${nextflowdir}"/nextflow -q run "${infdir}/${expertype}.nf" -c "${resultsdir}/cfg" -profile cluster --ntasks=${n} > "${resultsdir}/${toolname}.log" 2>&1 &
+"${nextflowdir}"/nextflow -q run "${resultsdir}/workflow.nf" -c "${resultsdir}/cfg" -profile cluster --ntasks=${n} > "${resultsdir}/${toolname}.log" 2>&1 &
 pid=$!
 popd
 
