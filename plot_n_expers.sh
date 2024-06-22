@@ -20,14 +20,13 @@ tmpfile=`mktemp`
 find "${results_basedir}" -name "time.out" -exec awk '{printf"%s\n",$0}' {} \; | grep "${expertype} ${num_procs}" > "${tmpfile}"
 
 # Generate csv file
-python "${pkgdir}/utils/gen_n_expers_data.py" "${tmpfile}" > "${pkgdir}/n_expers_data.csv"
+python "${pkgdir}/utils/gen_n_expers_data.py" "${tmpfile}" > "${resultsdir}/n_expers_data.csv"
 
 # Generate plot
-gnuplot "${pkgdir}/utils/n_expers.gp"
-
-# Move files
-mv "${pkgdir}/n_expers_data.csv" "${resultsdir}"
-mv "${pkgdir}/n_expers_plot.png" "${resultsdir}"
+cp "${pkgdir}/utils/n_expers.gp" "${resultsdir}"
+pushd "${resultsdir}"
+gnuplot "n_expers.gp"
+popd
 
 # Remove tmp file
 rm "${tmpfile}"
