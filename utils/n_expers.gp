@@ -7,6 +7,7 @@ set title "N Value Experiments"
 set xlabel "n"
 set ylabel "Time (s)"
 set key top left
+set logscale x
 
 # color definitions
 set border linewidth 1.5
