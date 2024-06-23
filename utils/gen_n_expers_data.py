@@ -35,7 +35,10 @@ def print_data(tools, data_points):
     for n in data_points:
         row = str(n)
         for i in range(len(tool_list)):
-            row += "," + data_points[n][tool_list[i]]
+            if tool_list[i] in data_points[n]:
+                row += "," + data_points[n][tool_list[i]]
+            else:
+                row += ","
         print(row)
 
 def main():
