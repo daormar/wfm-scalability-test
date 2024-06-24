@@ -40,8 +40,6 @@ def main():
         y_values.append(1/nnodes)
 
     # Obtain Pearson's correlation coefficient
-    print(x_values)
-    print(y_values)
     c = scipy.stats.pearsonr(x_values, y_values)
 
     # Print result
