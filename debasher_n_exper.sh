@@ -2,7 +2,7 @@ extract_process_dist_data()
 {
     local resultsdir=$1
 
-    find "${resultsdir}/debasher_out/__exec__" -name "host?_*.stdout" -exec cat {} \; | awk '{print $2}' | sort | uniq -c
+    find "${resultsdir}/debasher_out/__exec__" -name "host?_*.stdout" -exec cat {} \; | awk '{print $NF}' | sort | uniq -c
 }
 
 if [ $# -ne 3 ]; then
