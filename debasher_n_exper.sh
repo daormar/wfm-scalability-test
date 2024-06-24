@@ -50,8 +50,8 @@ awk -v tool="${toolname}" -v expertype="${expertype}" -v num_procs=$num_procs -v
 # Extract process distribution data
 extract_process_dist_data "${resultsdir}" > "${resultsdir}/distrib.out"
 
-# Calculate Pearson's correlation coefficient
-python "${pkgdir}/utils/pearson.py" "${num_procs}" "${resultsdir}/distrib.out" > "${resultsdir}/distrib.r"
+# Calculate deviation from optimal values
+python "${pkgdir}/utils/calc_deviation.py" "${num_procs}" "${resultsdir}/distrib.out" > "${resultsdir}/distrib.dev"
 echo "" >&2
 
 # Restore directory
