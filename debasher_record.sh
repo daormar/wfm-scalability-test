@@ -27,7 +27,7 @@ debasherdir="${pkgdir}/software/debasher"
 pushd "${pkgdir}"
 
 # Execute experiment
-pfile="/home/dortiz/bio/software/debasher/examples/programs/debasher_${expertype}_expl_deps.sh"
+pfile="${pkgdir}/examples/programs/debasher_${expertype}_expl_deps.sh"
 "${debasherdir}/bin/debasher_exec" '--pfile' "${pfile}" '--outdir' "${resultsdir}/${toolname}_out" '-n' ${n} '--sched' 'SLURM' '--builtinsched-cpus' '4' '--builtinsched-mem' '128' '--builtinsched-debug' '--conda-support' --wait > "${resultsdir}/${toolname}_record.log" 2>&1 &
 pid=$!
 
