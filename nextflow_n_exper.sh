@@ -37,7 +37,6 @@ mkdir -p "${baseresultsdir}"
 
 # Iterate over different values of n
 echo "Experiment type: $expertype" >&2
-pfile="${pkgdir}/examples/programs/debasher_${expertype}_expl_deps.sh"
 echo "n= $n ..." >&2
 
 # Define experiment directory
