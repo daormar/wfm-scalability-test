@@ -36,10 +36,7 @@ tmpfile=`mktemp`
 find "${results_basedir}" -name "time.out" -exec awk '{printf"%s\n",$0}' {} \; | grep "${expertype} ${num_procs} ${n}" > "${tmpfile}"
 
 # Generate csv file
-python "${pkgdir}/utils/gen_jobs_time_expers_data.py" "${tmpfile}" > "${resultsdir}/jobs_time_expers_data_unsorted.csv"
-
-# Sort csv file
-(head -n 1 "${resultsdir}/jobs_time_expers_data_unsorted.csv" && tail -n +2 "${resultsdir}/jobs_time_expers_data_unsorted.csv" | sort -t, -k1,1n) > "${resultsdir}/jobs_time_expers_data.csv"
+python "${pkgdir}/utils/gen_jobs_time_expers_data.py" "${tmpfile}" > "${resultsdir}/jobs_time_expers_data.csv"
 
 # Generate plot
 cp "${pkgdir}/utils/jobs_time_expers.gp" "${resultsdir}"
