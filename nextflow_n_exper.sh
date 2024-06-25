@@ -98,7 +98,7 @@ fi
 
 # Execute experiment
 pushd "${resultsdir}"
-/bin/time -f "%e %M" -o "${resultsdir}/time_command_$n" "${nextflowdir}"/nextflow -q run "${resultsdir}/workflow.nf" -c "${resultsdir}/cfg" -profile cluster --ntasks=${n} > "${resultsdir}/${toolname}.log" 2>&1
+/bin/time -f "%e %M" -o "${resultsdir}/time_command_$n" "${nextflowdir}"/nextflow -q run "${resultsdir}/workflow.nf" -c "${resultsdir}/cfg" -profile cluster --ntasks=${n_par} > "${resultsdir}/${toolname}.log" 2>&1
 popd
 
 # Extract time and memory data

@@ -73,7 +73,7 @@ resultsdir="${baseresultsdir}/${expertype}/n_$n"
 mkdir -p "${resultsdir}"
 
 # Execute experiment
-/bin/time -f "%e %M" -o "${resultsdir}/time_command_$n" "${debasherdir}/bin/debasher_exec" '--pfile' "${pfile}" '--outdir' "${resultsdir}/debasher_out" '-n' ${n} '--sched' 'SLURM' '--builtinsched-cpus' '4' '--builtinsched-mem' '128' '--builtinsched-debug' '--conda-support' --wait > "${resultsdir}/${toolname}.log" 2>&1
+/bin/time -f "%e %M" -o "${resultsdir}/time_command_$n" "${debasherdir}/bin/debasher_exec" '--pfile' "${pfile}" '--outdir' "${resultsdir}/debasher_out" '-n' ${n_par} '--sched' 'SLURM' '--builtinsched-cpus' '4' '--builtinsched-mem' '128' '--builtinsched-debug' '--conda-support' --wait > "${resultsdir}/${toolname}.log" 2>&1
 
 # Extract time and memory data
 awk -v tool="${toolname}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n -v njobs=$njobs '{printf "%s %s %d %d %d %s", tool, expertype, num_procs, n, njobs, $1}' "${resultsdir}/time_command_$n" > "${resultsdir}/time.out"

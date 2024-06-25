@@ -77,7 +77,7 @@ mkdir -p "${resultsdir}/toil_out"
 mkdir -p "${resultsdir}/toil_executions"
 
 # Generate yml file
-sed "s/NTASKS/${n}/" "${infdir}/wdl_input_template.${expertype}.json" > "${resultsdir}/input.json"
+sed "s/NTASKS/${n_par}/" "${infdir}/wdl_input_template.${expertype}.json" > "${resultsdir}/input.json"
 sed -i "s/LOG1/host1_tasks${tasks}.txt/" "${resultsdir}/input.json"
 sed -i "s/LOG2/host2_tasks${tasks}.txt/" "${resultsdir}/input.json"
 

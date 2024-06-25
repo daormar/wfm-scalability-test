@@ -79,7 +79,7 @@ mkdir -p "${resultsdir}"
 sed "s/CORES/${num_procs}/" "${infdir}/backend.conf" > "${resultsdir}/backend.conf"
 
 # Generate yml file
-sed "s/NTASKS/${n}/" "${infdir}/cwl_input_template.yml" > "${resultsdir}/input.yml"
+sed "s/NTASKS/${n_par}/" "${infdir}/cwl_input_template.yml" > "${resultsdir}/input.yml"
 sed -i "s/LOG1/host1_tasks${tasks}.txt/" "${resultsdir}/input.yml"
 sed -i "s/LOG2/host2_tasks${tasks}.txt/" "${resultsdir}/input.yml"
 
