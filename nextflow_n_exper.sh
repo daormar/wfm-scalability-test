@@ -39,19 +39,20 @@ get_num_jobs()
     echo "${njobs}"
 }
 
-if [ $# -ne 6 ]; then
-    echo "Usage: nextflow_n_exper <qsize> <mforks> <num_procs> <expertype> <n_par> <array_size>"
+if [ $# -ne 7 ]; then
+    echo "Usage: nextflow_n_exper <qsize> <mforks> <num_nodes> <num_procs> <expertype> <n_par> <array_size>"
     exit 0
 fi
 
 # Initialize variables
 qsize=$1
 mforks=$2
-num_procs=$3
-expertype=$4
-n_par=$5
+num_nodes=$3
+num_procs=$4
+expertype=$5
+n_par=$6
 n=$(get_n_val "${expertype}" "${n_par}")
-array_size=$6
+array_size=$7
 njobs=$(get_num_jobs "${expertype}" "${n_par}" "${array_size}")
 
 # Set toolname variable
@@ -108,7 +109,7 @@ awk -v tool="${toolname}_${array_size}" -v expertype="${expertype}" -v num_procs
 extract_process_dist_data "${resultsdir}/${toolname}.log" > "${resultsdir}/distrib.out"
 
 # Calculate deviation from optimal values
-python "${pkgdir}/utils/calc_deviation.py" "${num_procs}" "${resultsdir}/distrib.out" > "${resultsdir}/distrib.dev"
+python "${pkgdir}/utils/calc_deviation.py" "${num_nodes}" "${resultsdir}/distrib.out" > "${resultsdir}/distrib.dev"
 echo "" >&2
 
 # Restore directory

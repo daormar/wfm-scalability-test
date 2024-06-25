@@ -34,15 +34,16 @@ get_num_jobs()
     echo "${njobs}"
 }
 
-if [ $# -ne 3 ]; then
-    echo "Usage: cromwell_wdl_n_exper <num_procs> <expertype> <n_par>"
+if [ $# -ne 4 ]; then
+    echo "Usage: cromwell_wdl_n_exper <num_nodes> <num_procs> <expertype> <n_par>"
     exit 0
 fi
 
 # Initialize variables
-num_procs=$1
-expertype=$2
-n_par=$3
+num_nodes=$1
+num_procs=$2
+expertype=$3
+n_par=$4
 n=$(get_n_val "${expertype}" "${n_par}")
 njobs=$(get_num_jobs "${expertype}" "${n_par}")
 
@@ -95,7 +96,7 @@ awk -v tool="${toolname}" -v expertype="${expertype}" -v num_procs=$num_procs -v
 extract_process_dist_data "${resultsdir}" > "${resultsdir}/distrib.out"
 
 # Calculate deviation from optimal values
-python "${pkgdir}/utils/calc_deviation.py" "${num_procs}" "${resultsdir}/distrib.out" > "${resultsdir}/distrib.dev"
+python "${pkgdir}/utils/calc_deviation.py" "${num_nodes}" "${resultsdir}/distrib.out" > "${resultsdir}/distrib.dev"
 echo "" >&2
 
 # Restore directory
