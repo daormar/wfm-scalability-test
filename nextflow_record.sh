@@ -1,5 +1,5 @@
 if [ $# -ne 5 ]; then
-    echo "Usage: nextflow_record <qsize> <mforks> <expertype> <n> <array_size>"
+    echo "Usage: nextflow_record <qsize> <mforks> <expertype> <n_par> <array_size>"
     exit 0
 fi
 
@@ -7,7 +7,7 @@ fi
 qsize=$1
 mforks=$2
 expertype=$3
-n=$4
+n_par=$4
 array_size=$5
 
 # Set toolname variable
@@ -43,7 +43,7 @@ pushd "${pkgdir}"
 
 # Execute experiment
 pushd "${resultsdir}"
-"${nextflowdir}"/nextflow -q run "${resultsdir}/workflow.nf" -c "${resultsdir}/cfg" -profile cluster --ntasks=${n} > "${resultsdir}/${toolname}.log" 2>&1 &
+"${nextflowdir}"/nextflow -q run "${resultsdir}/workflow.nf" -c "${resultsdir}/cfg" -profile cluster --ntasks=${n_par} > "${resultsdir}/${toolname}.log" 2>&1 &
 pid=$!
 popd
 
