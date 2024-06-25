@@ -52,15 +52,9 @@ def main():
     # Root Mean Squared Error (RMSE)
     rmse = np.sqrt(mse)
 
-    # R-squared
-    ss_res = np.sum((observed_values - optimal_values)**2)
-    ss_tot = np.sum((observed_values - np.mean(observed_values))**2)
-    r_squared = 1 - (ss_res / ss_tot)
-
     print("MAE:", mae)
     print("MSE:", mse)
     print("RMSE:", rmse)
-    print("R-squared:", r_squared)
 
 if __name__ == "__main__":
     main()
