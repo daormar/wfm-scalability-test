@@ -11,7 +11,7 @@ def load_data(filename):
                 tool = fields[0]
                 tools.add(tool)
                 n = fields[3]
-                time = fields[4]
+                time = fields[5]
                 if n in data_points:
                     data_points[n][tool] = time
                 else:

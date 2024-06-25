@@ -5,15 +5,46 @@ extract_process_dist_data()
     find "${resultsdir}/cromwell-executions" -name "*tasks.txt" -exec cat {} \; | sort | uniq -c
 }
 
+get_n_val()
+{
+    local expertype=$1
+    local n_par=$2
+    local n_val
+    if [ "${expertype}" = "host_process" ]; then
+        n_val=$n_par
+    else
+        n_val=$((2 * n_par))
+    fi
+
+    echo "${n_val}"
+}
+
+get_num_jobs()
+{
+    local expertype=$1
+    local n_par=$2
+    local njobs
+
+    if [ "${expertype}" = "host_process" ]; then
+        njobs=$n_par
+    else
+        njobs=$((2 * n_par))
+    fi
+
+    echo "${njobs}"
+}
+
 if [ $# -ne 3 ]; then
-    echo "Usage: cromwell_cwl_n_exper <num_procs> <expertype> <n>"
+    echo "Usage: cromwell_cwl_n_exper <num_procs> <expertype> <n_par>"
     exit 0
 fi
 
-# Get number of processors parameter
+# Initialize variables
 num_procs=$1
 expertype=$2
-n=$3
+n_par=$3
+n=$(get_n_val "${expertype}" "${n_par}")
+njobs=$(get_num_jobs "${expertype}" "${n_par}")
 
 # Set toolname variable
 toolname="cromwell_cwl"
@@ -57,8 +88,8 @@ pushd "${resultsdir}"
 popd
 
 # Extract time and memory data
-awk -v tool="${toolname}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n '{printf "%s %s %d %d %s", tool, expertype, num_procs, n, $1}' "${resultsdir}/time_command_$n" > "${resultsdir}/time.out"
-awk -v tool="${toolname}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n '{printf "%s %s %d %d %s", tool, expertype, num_procs, n, $2}' "${resultsdir}/time_command_$n" > "${resultsdir}/mem.out"
+awk -v tool="${toolname}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n -v njobs=$njobs '{printf "%s %s %d %d %d %s", tool, expertype, num_procs, n, njobs, $1}' "${resultsdir}/time_command_$n" > "${resultsdir}/time.out"
+awk -v tool="${toolname}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n -v njobs=$njobs '{printf "%s %s %d %d %d %s", tool, expertype, num_procs, n, njobs, $2}' "${resultsdir}/time_command_$n" > "${resultsdir}/mem.out"
 
 # Extract process distribution data
 extract_process_dist_data "${resultsdir}" > "${resultsdir}/distrib.out"

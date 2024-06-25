@@ -5,15 +5,46 @@ extract_process_dist_data()
     find "${resultsdir}/debasher_out/__exec__" -name "host?_*.stdout" -exec cat {} \; | awk '{print $NF}' | sort | uniq -c
 }
 
+get_n_val()
+{
+    local expertype=$1
+    local n_par=$2
+    local n_val
+    if [ "${expertype}" = "host_process" ]; then
+        n_val=$n_par
+    else
+        n_val=$((2 * n_par))
+    fi
+
+    echo "${n_val}"
+}
+
+get_num_jobs()
+{
+    local expertype=$1
+    local n_par=$2
+    local njobs
+
+    if [ "${expertype}" = "host_process" ]; then
+        njobs=1
+    else
+        njobs=2
+    fi
+
+    echo "${njobs}"
+}
+
 if [ $# -ne 3 ]; then
-    echo "Usage: debasher_n_exper <num_procs> <expertype> <n>"
+    echo "Usage: debasher_n_exper <num_procs> <expertype> <n_par>"
     exit 0
 fi
 
-# Get number of processors parameter
+# Initialize variables
 num_procs=$1
 expertype=$2
-n=$3
+n_par=$3
+n=$(get_n_val "${expertype}" "${n_par}")
+njobs=$(get_num_jobs "${expertype}" "${n_par}")
 
 # Set toolname variable
 toolname="debasher"
@@ -31,7 +62,7 @@ pushd "${pkgdir}"
 # Create results directory
 mkdir -p "${baseresultsdir}"
 
-# Iterate over different values of n
+# Execute experiment for n
 echo "Experiment type: $expertype" >&2
 pfile="${debasherdir}/examples/programs/debasher_${expertype}_expl_deps.sh"
 echo "n= $n ..." >&2
@@ -44,8 +75,8 @@ mkdir -p "${resultsdir}"
 /bin/time -f "%e %M" -o "${resultsdir}/time_command_$n" "${debasherdir}/bin/debasher_exec" '--pfile' "${pfile}" '--outdir' "${resultsdir}/debasher_out" '-n' ${n} '--sched' 'SLURM' '--builtinsched-cpus' '4' '--builtinsched-mem' '128' '--builtinsched-debug' '--conda-support' --wait > "${resultsdir}/${toolname}.log" 2>&1
 
 # Extract time and memory data
-awk -v tool="${toolname}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n '{printf "%s %s %d %d %s", tool, expertype, num_procs, n, $1}' "${resultsdir}/time_command_$n" > "${resultsdir}/time.out"
-awk -v tool="${toolname}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n '{printf "%s %s %d %d %s", tool, expertype, num_procs, n, $2}' "${resultsdir}/time_command_$n" > "${resultsdir}/mem.out"
+awk -v tool="${toolname}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n -v njobs=$njobs '{printf "%s %s %d %d %d %s", tool, expertype, num_procs, n, njobs, $1}' "${resultsdir}/time_command_$n" > "${resultsdir}/time.out"
+awk -v tool="${toolname}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n -v njobs=$njobs '{printf "%s %s %d %d %d %s", tool, expertype, num_procs, n, njobs, $2}' "${resultsdir}/time_command_$n" > "${resultsdir}/mem.out"
 
 # Extract process distribution data
 extract_process_dist_data "${resultsdir}" > "${resultsdir}/distrib.out"

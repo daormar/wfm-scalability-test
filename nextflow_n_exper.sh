@@ -5,18 +5,54 @@ extract_process_dist_data()
     grep "hostname_" "${logfile}" | awk '{print $NF}' | sort | uniq -c
 }
 
+get_n_val()
+{
+    local expertype=$1
+    local n_par=$2
+    local n_val
+    if [ "${expertype}" = "host_process" ]; then
+        n_val=$n_par
+    else
+        n_val=$((2 * n_par))
+    fi
+
+    echo "${n_val}"
+}
+
+get_num_jobs()
+{
+    local expertype=$1
+    local n_par=$2
+    local array_size=$3
+    local njobs
+
+    if [ "${array_size}" -eq 0 ]; then
+        array_size=1
+    fi
+
+    if [ "${expertype}" = "host_process" ]; then
+        njobs=$(echo "" | awk -v n_par=$n_par -v array_size=$array_size '{printf"%d", 1*(n_par/array_size)}')
+    else
+        njobs=$(echo "" | awk -v n_par=$n_par -v array_size=$array_size '{printf"%d", 2*(n_par/array_size)}')
+    fi
+
+    echo "${njobs}"
+}
+
 if [ $# -ne 6 ]; then
-    echo "Usage: nextflow_n_exper <qsize> <mforks> <num_procs> <expertype> <n> <array_size>"
+    echo "Usage: nextflow_n_exper <qsize> <mforks> <num_procs> <expertype> <n_par> <array_size>"
     exit 0
 fi
 
-# Get number of processors parameter
+# Initialize variables
 qsize=$1
 mforks=$2
 num_procs=$3
 expertype=$4
-n=$5
+n_par=$5
+n=$(get_n_val "${expertype}" "${n_par}")
 array_size=$6
+njobs=$(get_num_jobs "${expertype}" "${n_par}" "${array_size}")
 
 # Set toolname variable
 toolname="nextflow"
@@ -35,7 +71,7 @@ pushd "${pkgdir}"
 # Create results directory
 mkdir -p "${baseresultsdir}"
 
-# Iterate over different values of n
+# Execute experiment for n
 echo "Experiment type: $expertype" >&2
 echo "n= $n ..." >&2
 
@@ -65,8 +101,8 @@ pushd "${resultsdir}"
 popd
 
 # Extract time and memory data
-awk -v tool="${toolname}_${array_size}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n '{printf "%s %s %d %d %s", tool, expertype, num_procs, n, $1}' "${resultsdir}/time_command_$n" > "${resultsdir}/time.out"
-awk -v tool="${toolname}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n '{printf "%s %s %d %d %s", tool, expertype, num_procs, n, $2}' "${resultsdir}/time_command_$n" > "${resultsdir}/mem.out"
+awk -v tool="${toolname}_${array_size}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n -v njobs=$njobs '{printf "%s %s %d %d %d %s", tool, expertype, num_procs, n, njobs, $1}' "${resultsdir}/time_command_$n" > "${resultsdir}/time.out"
+awk -v tool="${toolname}_${array_size}" -v expertype="${expertype}" -v num_procs=$num_procs -v n=$n -v njobs=$njobs '{printf "%s %s %d %d %d %s", tool, expertype, num_procs, n, njobs, $2}' "${resultsdir}/time_command_$n" > "${resultsdir}/mem.out"
 
 # Extract process distribution data
 extract_process_dist_data "${resultsdir}/${toolname}.log" > "${resultsdir}/distrib.out"
