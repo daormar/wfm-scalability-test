@@ -65,7 +65,7 @@ mkdir -p "${baseresultsdir}"
 
 # Execute experiment for n
 echo "Experiment type: $expertype" >&2
-pfile="${debasherdir}/examples/programs/debasher_${expertype}_expl_deps.sh"
+pfile="${debasherdir}/examples/programs/debasher_${expertype}_medium.sh"
 echo "n= $n ..." >&2
 
 # Define experiment directory
