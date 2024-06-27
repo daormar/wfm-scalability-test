@@ -18,7 +18,7 @@ mkdir -p "${resultsdir}"
 # Generate temporary file with n value experiments data
 tmpfile=`mktemp`
 find "${results_basedir}" -name "time.out" -exec awk '{printf"%s\n",$0}' {} \; | grep "${expertype} ${num_procs}" > "${tmpfile}"
-cat $tmpfile
+
 # Generate csv file
 python "${pkgdir}/utils/gen_n_expers_data.py" "${tmpfile}" > "${resultsdir}/n_expers_data_unsorted.csv"
 
