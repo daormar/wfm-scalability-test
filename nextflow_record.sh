@@ -43,12 +43,12 @@ pushd "${pkgdir}"
 
 # Execute experiment
 pushd "${resultsdir}"
-"${nextflowdir}"/nextflow -q run "${resultsdir}/workflow.nf" -c "${resultsdir}/cfg" -profile cluster --ntasks=${n_par} > "${resultsdir}/${toolname}.log" 2>&1 &
+"${nextflowdir}"/nextflow -q run "${resultsdir}/workflow.nf" -c "${resultsdir}/cfg" -profile cluster --ntasks=${n_par} > "${resultsdir}/${toolname}_${array_size}.log" 2>&1 &
 pid=$!
 popd
 
 # Execute psrecord
-psrecord "${pid}" --interval 1 --log "${resultsdir}/${toolname}_record.txt" --plot "${resultsdir}/${toolname}_record.png"
+psrecord "${pid}" --interval 1 --log "${resultsdir}/${toolname}_${array_size}_record.txt" --plot "${resultsdir}/${toolname}_${array_size}_record.png"
 
 wait "${pid}"
 
