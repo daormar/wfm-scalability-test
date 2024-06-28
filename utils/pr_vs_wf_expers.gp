@@ -1,6 +1,6 @@
 # Set the output file name and format
 set terminal pngcairo enhanced font 'arial,16' size 800, 600
-set output 'n_expers_plot.png'
+set output 'pr_vs_wf_expers_plot.png'
 
 # Set plot title and labels
 set title "host_process vs host_workflow Experiments"
