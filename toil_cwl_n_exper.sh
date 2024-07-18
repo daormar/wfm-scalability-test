@@ -83,7 +83,7 @@ sed -i "s/LOG2/host2_tasks${tasks}.txt/" "${resultsdir}/input.yml"
 # Execute experiment
 pushd "${resultsdir}"
 conda activate toil
-/bin/time -f "%e %M" -o "${resultsdir}/time_command_$n" toil-cwl-runner --jobStore myStore --batchSystem slurm --outdir toil_out --workDir toil_executions --maxCores $n --disableCaching "${infdir}/${expertype}.cwl" "${resultsdir}/input.yml" > "${resultsdir}/${toolname}.log" 2>&1
+/bin/time -f "%e %M" -o "${resultsdir}/time_command_$n" toil-cwl-runner --jobStore myStore --batchSystem slurm --outdir toil_out --workDir toil_executions --disableCaching "${infdir}/${expertype}.cwl" "${resultsdir}/input.yml" > "${resultsdir}/${toolname}.log" 2>&1
 conda deactivate
 popd
 
