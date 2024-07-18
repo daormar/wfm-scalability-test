@@ -46,7 +46,6 @@ expertype=$3
 n_par=$4
 n=$(get_n_val "${expertype}" "${n_par}")
 njobs=$(get_num_jobs "${expertype}" "${n_par}")
-max_mem=1024Mi
 
 # Set toolname variable
 toolname="toil_cwl"
@@ -84,7 +83,7 @@ sed -i "s/LOG2/host2_tasks${tasks}.txt/" "${resultsdir}/input.yml"
 # Execute experiment
 pushd "${resultsdir}"
 conda activate toil
-/bin/time -f "%e %M" -o "${resultsdir}/time_command_$n" toil-cwl-runner --jobStore myStore --batchSystem slurm --outdir toil_out --workDir toil_executions --maxCores $n --maxMemory $max_mem --disableCaching "${infdir}/${expertype}.cwl" "${resultsdir}/input.yml" > "${resultsdir}/${toolname}.log" 2>&1
+/bin/time -f "%e %M" -o "${resultsdir}/time_command_$n" toil-cwl-runner --jobStore myStore --batchSystem slurm --outdir toil_out --workDir toil_executions --maxCores $n --disableCaching "${infdir}/${expertype}.cwl" "${resultsdir}/input.yml" > "${resultsdir}/${toolname}.log" 2>&1
 conda deactivate
 popd
 
