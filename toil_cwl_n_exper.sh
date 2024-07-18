@@ -46,7 +46,7 @@ expertype=$3
 n_par=$4
 n=$(get_n_val "${expertype}" "${n_par}")
 njobs=$(get_num_jobs "${expertype}" "${n_par}")
-max_mem=1024M
+max_mem=1024Mi
 
 # Set toolname variable
 toolname="toil_cwl"
