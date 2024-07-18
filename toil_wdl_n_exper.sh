@@ -63,7 +63,7 @@ pushd "${pkgdir}"
 # Create results directory
 mkdir -p "${baseresultsdir}"
 
-# Iterate over different values of n
+# Execute experiment for n
 echo "Experiment type: $expertype" >&2
 echo "n= $n ..." >&2
 
