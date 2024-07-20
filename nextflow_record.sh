@@ -17,7 +17,7 @@ toolname="nextflow"
 pkgdir="$(cd "$(dirname "$0")" && pwd)"
 nextflowdir="${pkgdir}/software"
 infdir="${pkgdir}/input_files/${toolname}"
-resultsdir="${pkgdir}/results/record/${toolname}_${n_par}_${array_size}_record"
+resultsdir="${pkgdir}/results/record_wf/${toolname}_${n_par}_${array_size}_record"
 
 # Create results directory
 if [ -d "${resultsdir}" ]; then
