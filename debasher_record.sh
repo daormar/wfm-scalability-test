@@ -12,7 +12,7 @@ toolname="debasher"
 
 # Initialize variables for different directories
 pkgdir="$(cd "$(dirname "$0")" && pwd)"
-resultsdir="${pkgdir}/results/record_wf/${toolname}_${n_par}_record"
+resultsdir="${pkgdir}/results/record_wf/${toolname}_${n_par}"
 
 # Create results directory
 if [ -d "${resultsdir}" ]; then
