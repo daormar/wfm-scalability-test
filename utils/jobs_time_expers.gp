@@ -1,5 +1,5 @@
 # Set the output file name and format
-set terminal pngcairo enhanced font 'arial,16' size 800, 600
+set terminal pngcairo noenhanced font 'arial,16' size 800, 600
 set output 'jobs_time_expers_plot.png'
 
 # Set plot title and labels
