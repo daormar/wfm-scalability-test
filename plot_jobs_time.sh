@@ -33,7 +33,7 @@ mkdir -p "${resultsdir}"
 
 # Generate temporary file with n value experiments data
 tmpfile=`mktemp`
-find "${results_basedir}" -name "time.out" -exec awk '{printf"%s\n",$0}' {} \; | grep "${expertype} ${num_procs} ${n} " | sort -k2,2n > "${tmpfile}"
+find "${results_basedir}" -name "time.out" -exec awk '{printf"%s\n",$0}' {} \; | grep "${expertype} ${num_procs} ${n} " | sort -k5,5n > "${tmpfile}"
 
 # Generate csv file
 python "${pkgdir}/utils/gen_jobs_time_expers_data.py" "${tmpfile}" > "${resultsdir}/jobs_time_expers_data.csv"
